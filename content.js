@@ -1,6 +1,7 @@
 let isScrolling = false;
 let collectedTweets = [];
 let tweetLenghth = 100;
+let tweetPostUrl = '';
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   chrome.storage.local.get("numberOfTweets", (result) => {
@@ -13,6 +14,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   } else if (request.action === "stopScrolling") {
     isScrolling = false;
     chrome.storage.local.get("tweetPostUrl", (result) => {
+        tweetPostUrl = result.tweetPostUrl
       postTweetsToOllama(
         collectedTweets,
         result.tweetPostUrl || "http://localhost:1234/v1/chat/completions"
@@ -65,14 +67,23 @@ Analyze the following list of tweets:
 
 ${tweets.join("\n")}
 
-Based on these tweets, recommend 3-5 books that will challenge the author's current worldview and expose them to radically different perspectives. The recommended books should:
+Based on these tweets, first recommend 3-5 books that will challenge the author's current worldview wildly and expose them to radically different perspectives. The recommended books should:
 
 1. Present ideas that contrast with or contradict the views expressed in the tweets
 2. Introduce novel concepts or ways of thinking not evident in the tweet content
 3. Originate from diverse cultural, philosophical, or ideological backgrounds
 4. Have the potential to significantly alter the author's understanding of the world
 
+Then recommend 2-3 books that will expand the author's current perspectives on ideas he already holds and allow the author to dig deeper into his existing interests. The recommended books should:
+
+1. Offer nuanced or alternative views on topics the author is already interested in
+2. Provide in-depth analysis or exploration of themes present in the tweets
+3. Introduce new dimensions or aspects of familiar ideas
+4. Challenge the author to think more critically or broadly about his existing beliefs
+
 For each book recommendation, briefly explain why it was chosen and how it could expand the author's perspective.
+
+Add a conclusion that summarizes the key takeaways from the tweet analysis and broad statement on why the suggested books are valuable for the author.
 
 The response should all be in properly formated markdown.
 `;
@@ -113,7 +124,7 @@ function loop(scrollAmount) {
   if (collectedTweets.length >= tweetLimit) {
     postTweetsToOllama(
       collectedTweets,
-      "http://localhost:1234/v1/chat/completions"
+      tweetPostUrl || "http://localhost:1234/v1/chat/completions"
     );
     return;
   }
