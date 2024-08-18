@@ -1,32 +1,57 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <style>
-    body { width: 300px; font-family: Arial, sans-serif; padding: 10px; }
-    label { display: block; margin-bottom: 5px; }
-    input { width: 100%; margin-bottom: 10px; }
-    button { width: 100%; }
-    textarea { width: 100%; height: 100px; margin-top: 10px; }
-  </style>
-</head>
-<body>
-  <h2>Configure Settings</h2>
-  
-  <label for="urlInput">Localhost URL:</label>
-  <input type="text" id="urlInput" placeholder="http://localhost:11434/api/generate">
-  
-  <label for="scrollAmount">Scroll Amount (default 5000):</label>
-  <input type="number" id="scrollAmount" value="100">
-  
-  <button id="saveSettings">Save Settings</button>
+  <head>
+    <style>
+      body {
+        width: 300px;
+        font-family: Arial, sans-serif;
+        padding: 10px;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+      }
+      input {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+      button {
+        width: 100%;
+      }
+      textarea {
+        width: 100%;
+        height: 100px;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Configure Settings</h2>
 
-  <button id="start">Start Scrolling</button>
-  
-  <p id="status"></p>
+    <label for="urlInput">Localhost URL:</label>
+    <input
+      type="text"
+      id="urlInput"
+      placeholder="http://localhost:1234/v1/chat/completions"
+    />
 
-  <h3>Server Response:</h3>
-  <textarea id="serverResponse" readonly></textarea>
-  
-  <script src="popup.js"></script>
-</body>
+    <label for="scrollAmount">Number of Tweets to Analyze</label>
+    <input type="number" id="scrollAmount" value="100" hidden disabled />
+    <input type="number" id="numberOfTweets" value="200" />
+    <input type="text" id="llmApiKey" placeholder="LLM API Key" />
+
+    <button id="saveSettings">Save Settings</button>
+
+    <button id="start">Start Scrolling</button>
+
+    <button id="stop">Stop Scrolling</button>
+
+    <p id="status"></p>
+
+    <h3>Book Recommendations</h3>
+    <div id="serverResponse"></div>
+
+    <script src="mark.js"></script>
+    <script src="popup.js"></script>
+  </body>
 </html>
